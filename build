@@ -1,0 +1,44 @@
+#!/bin/bash
+
+
+command_exists () {
+    type "$1" &> /dev/null ;
+}
+
+obtain_git_submodules() {
+    if command_exists git ; then 
+        git submodule init
+        git submodule update
+    else 
+        echo "[WARNING] git is not installed. git-submodules may not be cloned so that vagrant and puppet may not work properly."
+    fi
+}
+
+# start zinc server to accelerate compilation
+if command_exists zinc ; then
+    zinc -start
+else
+    echo "[WARNING] zinc is not installed. Run 'brew install zinc' and it speeds up compilation."
+fi
+
+set -e
+
+MAVEN_VERSION=3.2.1
+MAVEN_PACKAGE=apache-maven-$MAVEN_VERSION
+MAVEN_BINARY_DIR=$HOME/.m2/maven_packages
+export M2_HOME=$MAVEN_BINARY_DIR/$MAVEN_PACKAGE
+if [ ! -d "$M2_HOME" ]; then
+    mkdir -p $MAVEN_BINARY_DIR
+    if [ -x /usr/bin/curl ]; then
+        (cd /tmp && /usr/bin/curl -O http://apache.mirrors.lucidnetworks.net/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz)
+        tar zxvfp /tmp/$MAVEN_PACKAGE-bin.tar.gz -C $MAVEN_BINARY_DIR
+        export PATH=$PATH:$M2_HOME/bin
+    else
+        echo "curl is not found in /usr/bin/curl."
+        exit 1
+    fi
+fi
+
+obtain_git_submodules
+
+MAVEN_OPTS="${MAVEN_OPTS} -Xmx1024m -XX:MaxPermSize=512m" $M2_HOME/bin/mvn $*
