@@ -13,7 +13,7 @@ class ScalaViewModel {
 
   @Init
   def init() {
-    count = 999
+    count = 100
   }
 
   @Command
