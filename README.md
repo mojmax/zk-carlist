@@ -34,4 +34,4 @@
 * Add zul.xsd as an external resource for `http://www.zkoss.org/2005/zul` XML namespace so that
 auto completion works for the most of the elements. Please note that it is not fully updated and some of the
 attributes or elements recently added may not be recognized as valid.
-![Settings in Preference](/images/Map_External_Resource_for_zul.png)
+![Settings in Preference](/images/Map_External_Resource_for_ZUL.png)
