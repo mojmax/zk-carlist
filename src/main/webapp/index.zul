@@ -3,10 +3,34 @@ xmlns:h="http://www.w3.org/1999/xhtml"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 
-	<window apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm')@init('com.loyal3.admin.ui.ScalaViewModel')"
-		validationMessages="@id('vmsgs')">
-		<hlayout>count: <label value="@load(vm.count)" /></hlayout>
-		<button label="add" onClick="@command('cmd')"/>
-	</window>
+  <window title="Search" width="600px" border="normal" apply="tutorial.SearchController">
+    <hbox align="center">
+      Keyword:
+      <textbox id="keywordBox" />
+      <button id="searchButton" label="Search" image="/img/search.png" />
+    </hbox>
+    <listbox id="carListbox" height="160px" emptyMessage="No car found in the result">
+      <listhead>
+        <listheader label="Model" />
+        <listheader label="Make" />
+        <listheader label="Price" width="20%"/>
+      </listhead>
+      <template name="model">
+        <listitem>
+          <listcell label="${each.model}"></listcell>
+          <listcell label="${each.make}"></listcell>
+          <listcell>$<label value="${each.price}" /></listcell>
+        </listitem>
+      </template>
+    </listbox>
+    <hbox style="margin-top:20px">
+      <image id="previewImage" width="250px" />
+      <vbox>
+        <label id="modelLabel" />
+        <label id="makeLabel" />
+        <label id="priceLabel" />
+        <label id="descriptionLabel"/>
+      </vbox>
+    </hbox>
+  </window>
 </zk>
